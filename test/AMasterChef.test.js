@@ -207,5 +207,15 @@ contract('MasterChef', ([alice, bob, carol, dev, minter]) => {
             assert.equal((await this.chef.pendingTato(0, alice)).valueOf(), '0');
             assert.equal((await this.tato.balanceOf(alice)).valueOf(), '10600');
         });
+
+        it('handover the tatotoken mintage right', async () => {
+            this.master = await TatoMaster.new(this.tato.address, dev, '100', '0', { from: alice });
+            assert.equal(await this.tato.owner(), alice);
+            this.tato.transferOwnership(this.master.address, { from: alice });
+            assert.equal(await this.tato.owner(), this.master.address);
+            await this.master.handoverTatoMintage(bob);
+            assert.equal(await this.tato.owner(), bob);
+        });
+
     });
 });

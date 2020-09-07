@@ -132,6 +132,11 @@ contract MasterChef is Ownable {
         migrator = _migrator;
     }
 
+    // Handover the tatotoken mintage right.
+    function handoverTatoMintage(address newOwner) public onlyOwner {
+        tato.transferOwnership(newOwner);
+    }
+
     // Migrate lp token to another lp contract. Can be called by anyone. We trust that migrator contract is good.
     function migrate(uint256 _pid) public {
         require(address(migrator) != address(0), "migrate: no migrator");
